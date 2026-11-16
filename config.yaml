@@ -1,0 +1,35 @@
+# Single source of truth for the experiment. Every script reads this file.
+seed: 42
+
+data:
+  openml_name: adult
+  openml_version: 2
+  cache_dir: data
+  target: class
+  positive_label: ">50K"
+  # fnlwgt is a census sampling weight, not a characteristic of the person.
+  # education duplicates education-num (same information, ordinal version kept).
+  drop_columns: [fnlwgt, education]
+  sensitive_attribute: sex
+  test_size: 0.20
+  val_size: 0.20
+
+cv:
+  n_splits: 5
+  scoring: average_precision   # PR-AUC: the honest ranking metric under imbalance
+
+tuning:
+  n_trials:
+    logreg: 30
+    random_forest: 30
+    hist_gb: 50
+  nested:
+    outer_splits: 3
+    inner_splits: 3
+    n_trials: 15
+
+paths:
+  models: artifacts/models
+  figures: reports/figures
+  tables: reports/tables
+  run_log: runs/run_log.csv

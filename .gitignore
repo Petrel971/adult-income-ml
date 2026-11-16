@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+data/
+.DS_Store
+artifacts/models/*.joblib
+!artifacts/models/final_model.joblib
+runs/*.db
+runs/*.out
+artifacts/models/trials/
