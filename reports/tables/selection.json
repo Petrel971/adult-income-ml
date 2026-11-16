@@ -1,0 +1,16 @@
+{
+  "final_model": "hist_gb",
+  "validation_pr_auc": {
+    "logreg": 0.7781405375121986,
+    "random_forest": 0.8143686534174635,
+    "hist_gb": 0.828103720233758
+  },
+  "thresholds": {
+    "logreg": 0.3640149811126546,
+    "random_forest": 0.34191445952368926,
+    "hist_gb": 0.41944544058265876
+  },
+  "inner_cv_pr_auc": 0.8319337416134298,
+  "nested_cv_pr_auc_mean": 0.829262505368749,
+  "nested_cv_pr_auc_std": 0.004888009395857106
+}
