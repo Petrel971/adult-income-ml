@@ -1,0 +1,29 @@
+{
+  "logreg": {
+    "params": {
+      "C": 0.6516373382426941,
+      "l1_ratio": 1.0
+    },
+    "cv_pr_auc": 0.7839147890568425
+  },
+  "random_forest": {
+    "params": {
+      "n_estimators": 250,
+      "max_depth": 13,
+      "min_samples_leaf": 1,
+      "max_features": 0.42955039972027864
+    },
+    "cv_pr_auc": 0.8169834383940403
+  },
+  "hist_gb": {
+    "params": {
+      "learning_rate": 0.0909288192660825,
+      "max_iter": 450,
+      "max_leaf_nodes": 14,
+      "min_samples_leaf": 78,
+      "l2_regularization": 1.2368256772578516,
+      "max_features": 0.5981378393596264
+    },
+    "cv_pr_auc": 0.8319337416134298
+  }
+}
