@@ -445,6 +445,7 @@ comes from the files in \code{reports/tables/}, which \code{python main.py} rege
 
 \appendix
 \section{Run log}\label{app:runlog}
+\begin{sloppypar}
 The complete log is the supplementary file \code{runs/run\_log.csv} (110 lines, one per trial).
 Columns: \code{run\_id}, \code{timestamp}, \code{model}, \code{trial}, \code{params} (JSON),
 \code{cv\_pr\_auc\_mean}, \code{cv\_pr\_auc\_std}, \code{cv\_roc\_auc\_mean}, \code{cv\_brier\_mean},
@@ -456,6 +457,7 @@ on the whole training set) and to the history plot of its study
 \code{artifacts/models/<model>\_best.joblib}, the file evaluated in Section~\ref{sec:models}.
 The 110 model files weigh several hundred megabytes, so they are not versioned:
 \code{python main.py tune} regenerates them, with the same seed and the same results.
+\end{sloppypar}
 
 \begin{table}[H]\centering\footnotesize
 \begin{tabular}{lrp{7.6cm}rrr}\toprule
