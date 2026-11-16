@@ -14,13 +14,13 @@ The written report is in `report/report.pdf`. This README only explains how to r
 | Model | PR-AUC | ROC-AUC | F1 | Precision | Recall | Brier |
 |---|---|---|---|---|---|---|
 | No-skill baseline | 0.239 | 0.500 | 0.000 | 0.000 | 0.000 | 0.182 |
-| Logistic regression (tuned) | 0.769 | 0.907 | 0.689 | 0.650 | 0.733 | 0.102 |
-| Random forest (tuned) | 0.802 | 0.916 | 0.702 | 0.650 | 0.763 | 0.095 |
-| **Gradient boosting (tuned, final)** | **0.819** | **0.926** | **0.717** | 0.710 | 0.724 | **0.090** |
+| Logistic regression (tuned) | 0.769 | 0.907 | 0.689 | 0.649 | 0.733 | 0.102 |
+| Random forest (tuned) | 0.802 | 0.916 | 0.700 | 0.651 | 0.758 | 0.095 |
+| **Gradient boosting (tuned, final)** | **0.819** | **0.926** | **0.720** | 0.704 | 0.736 | **0.090** |
 
-Decision thresholds are chosen on the validation set (0.36, 0.34, 0.42). Final model: ECE 0.008
-(well calibrated). Fairness on `sex`: the true-positive-rate gap goes from 0.105 to 0.020 with
-group thresholds, for 0.004 of F1.
+Decision thresholds are chosen on the validation set (0.36, 0.35, 0.41). Final model: ECE 0.007
+(well calibrated). Fairness on `sex`: the true-positive-rate gap goes from 0.106 to 0.013 with
+group thresholds, for 0.007 of F1.
 
 ## Repository layout
 
@@ -76,7 +76,7 @@ curl -X POST localhost:8000/predict -H "Content-Type: application/json" -d @exam
 Response:
 
 ```json
-{"probability": 0.8059, "prediction": 1, "label": ">50K", "threshold": 0.4194, "model": "hist_gb"}
+{"probability": 0.8026, "prediction": 1, "label": ">50K", "threshold": 0.4093, "model": "hist_gb"}
 ```
 
 The endpoint takes a raw record (missing values allowed), runs the whole fitted Pipeline

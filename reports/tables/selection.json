@@ -1,16 +1,16 @@
 {
   "final_model": "hist_gb",
   "validation_pr_auc": {
-    "logreg": 0.7781405375121986,
-    "random_forest": 0.8143686534174635,
-    "hist_gb": 0.828103720233758
+    "logreg": 0.7780949026661304,
+    "random_forest": 0.8146383650585813,
+    "hist_gb": 0.828668990625569
   },
   "thresholds": {
-    "logreg": 0.3640149811126546,
-    "random_forest": 0.34191445952368926,
-    "hist_gb": 0.41944544058265876
+    "logreg": 0.36397951219890995,
+    "random_forest": 0.3454372181407446,
+    "hist_gb": 0.4093486441405653
   },
   "inner_cv_pr_auc": 0.8319337416134298,
-  "nested_cv_pr_auc_mean": 0.829262505368749,
-  "nested_cv_pr_auc_std": 0.004888009395857106
+  "nested_cv_pr_auc_mean": 0.8282386006713954,
+  "nested_cv_pr_auc_std": 0.005117221968187803
 }

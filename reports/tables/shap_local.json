@@ -1,88 +1,88 @@
 {
-  "base_value_log_odds": -2.3367854206257026,
+  "base_value_log_odds": -2.3954894059024654,
   "cases": {
     "true_positive": {
-      "probability": 0.9999290741726614,
+      "probability": 0.9999574081374015,
       "true_label": 1,
       "raw_row": {
-        "age": 52,
-        "workclass": "Federal-gov",
+        "age": 30,
+        "workclass": "Private",
         "education-num": 14,
         "marital-status": "Married-civ-spouse",
-        "occupation": "Prof-specialty",
+        "occupation": "Exec-managerial",
         "relationship": "Husband",
         "race": "White",
         "sex": "Male",
         "capital-gain": 15024,
         "capital-loss": 0,
-        "hours-per-week": 40,
-        "native-country": "Haiti"
-      },
-      "top_contributions": [
-        [
-          "capital_gain_log",
-          8.112480495817671
-        ],
-        [
-          "age",
-          0.9543677418263163
-        ],
-        [
-          "education-num",
-          0.7028991667779052
-        ],
-        [
-          "is_married",
-          0.5803336659896559
-        ],
-        [
-          "workclass_Federal-gov",
-          0.32096154794341514
-        ]
-      ]
-    },
-    "true_negative": {
-      "probability": 3.1512968029360825e-05,
-      "true_label": 0,
-      "raw_row": {
-        "age": 18,
-        "workclass": "Private",
-        "education-num": 8,
-        "marital-status": "Never-married",
-        "occupation": "Sales",
-        "relationship": "Own-child",
-        "race": "White",
-        "sex": "Male",
-        "capital-gain": 594,
-        "capital-loss": 0,
-        "hours-per-week": 14,
+        "hours-per-week": 60,
         "native-country": "United-States"
       },
       "top_contributions": [
         [
           "capital_gain_log",
-          -2.9916760945983505
+          8.690605102961683
         ],
         [
-          "age",
-          -2.4524364408703185
-        ],
-        [
-          "hours-per-week",
-          -0.7364900095824886
+          "education-num",
+          0.7759693116896446
         ],
         [
           "is_married",
-          -0.6031653135255562
+          0.6201113585509654
         ],
         [
-          "relationship_Own-child",
-          -0.26953143007434766
+          "age",
+          0.6000888869317665
+        ],
+        [
+          "hours-per-week",
+          0.5174649032988028
+        ]
+      ]
+    },
+    "true_negative": {
+      "probability": 2.5936701034335244e-05,
+      "true_label": 0,
+      "raw_row": {
+        "age": 18,
+        "workclass": "Self-emp-not-inc",
+        "education-num": 7,
+        "marital-status": "Never-married",
+        "occupation": "Other-service",
+        "relationship": "Own-child",
+        "race": "White",
+        "sex": "Female",
+        "capital-gain": 594,
+        "capital-loss": 0,
+        "hours-per-week": 4,
+        "native-country": "United-States"
+      },
+      "top_contributions": [
+        [
+          "capital_gain_log",
+          -2.5989232144225243
+        ],
+        [
+          "age",
+          -1.7942455729965476
+        ],
+        [
+          "hours-per-week",
+          -0.9404223515107021
+        ],
+        [
+          "is_married",
+          -0.4857702934695604
+        ],
+        [
+          "education-num",
+          -0.3890600207468643
         ]
       ]
     },
     "false_positive": {
-      "probability": 0.9993731129107469,
+      "probability": 0.9986077222852625,
       "true_label": 0,
       "raw_row": {
         "age": 36,
@@ -101,28 +101,28 @@
       "top_contributions": [
         [
           "capital_gain_log",
-          7.493905091120455
+          7.254308503208974
         ],
         [
           "age",
-          0.7009731410349066
+          0.6785565140558277
         ],
         [
           "hours-per-week",
-          0.5618020958157424
+          0.6301003823612148
         ],
         [
           "is_married",
-          0.5276681649198653
+          0.5586415298468578
         ],
         [
           "education-num",
-          -0.3943630574309182
+          -0.4916925634739046
         ]
       ]
     },
     "false_negative": {
-      "probability": 0.001152645570691195,
+      "probability": 0.0004080090249286368,
       "true_label": 1,
       "raw_row": {
         "age": 22,
@@ -141,63 +141,63 @@
       "top_contributions": [
         [
           "age",
-          -1.4256981946626763
+          -1.6125263067186402
         ],
         [
           "hours-per-week",
-          -0.7626392786212974
+          -1.1810189775625035
         ],
         [
           "is_married",
-          -0.5715725953278751
+          -0.5713372511329532
         ],
         [
           "relationship_Own-child",
-          -0.2662277778720711
+          -0.3903221292690484
         ],
         [
-          "occupation_None",
-          -0.26608077488893744
+          "occupation_Missing",
+          -0.3514275390147043
         ]
       ]
     },
     "borderline": {
-      "probability": 0.41944544058265876,
+      "probability": 0.4093486441405653,
       "true_label": 1,
       "raw_row": {
-        "age": 44,
+        "age": 36,
         "workclass": "Private",
-        "education-num": 10,
+        "education-num": 11,
         "marital-status": "Married-civ-spouse",
-        "occupation": "Craft-repair",
+        "occupation": "Adm-clerical",
         "relationship": "Husband",
-        "race": "Black",
+        "race": "White",
         "sex": "Male",
         "capital-gain": 0,
         "capital-loss": 0,
-        "hours-per-week": 38,
+        "hours-per-week": 40,
         "native-country": "United-States"
       },
       "top_contributions": [
         [
           "is_married",
-          0.8278729589273549
-        ],
-        [
-          "age",
-          0.7227297949944513
+          0.9264179843056641
         ],
         [
           "marital-status_Married-civ-spouse",
-          0.44776037694617593
+          0.3744242836748733
+        ],
+        [
+          "age",
+          0.36090564555334176
         ],
         [
           "capital_gain_log",
-          -0.3154010584530746
+          -0.34596309283622634
         ],
         [
-          "relationship_Husband",
-          0.17262754632708788
+          "marital-status_Never-married",
+          0.1893301065154935
         ]
       ]
     }

@@ -70,7 +70,9 @@ def build_preprocessor(scale=True):
     if scale:
         numeric.append(("scale", StandardScaler()))
     categorical = Pipeline([
-        ("impute", SimpleImputer(strategy="constant", fill_value="Missing")),
+        # Missing categoricals are stored as Python None (see src/data.py), not NaN.
+        ("impute", SimpleImputer(missing_values=None, strategy="constant",
+                                 fill_value="Missing")),
         ("onehot", OneHotEncoder(handle_unknown="ignore", min_frequency=20,
                                  sparse_output=False)),
     ])

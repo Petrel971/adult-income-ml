@@ -29,8 +29,8 @@
 \textbf{Dataset: Adult / Census Income} (\code{fetch\_openml(name="adult", version=2)}).\\
 \textbf{Code:} \url{https://github.com/Petrel971/adult-income-ml} (public repository).\\
 \textbf{Result:} a tuned gradient-boosting pipeline reaches a PR-AUC of 0.819 on the untouched test
-set (no-skill: 0.239), is well calibrated (ECE 0.008), and is served behind a FastAPI endpoint.
-The true-positive-rate gap between men and women falls from 0.105 to 0.020 after mitigation.}}
+set (no-skill: 0.239), is well calibrated (ECE 0.007), and is served behind a FastAPI endpoint.
+The true-positive-rate gap between men and women falls from 0.106 to 0.013 after mitigation.}}
 
 \section{Problem framing and EDA}
 
@@ -182,9 +182,9 @@ penalty, feature subsampling): 110 trials, 550 fits.
 noisy estimates, so it is biased upwards. We control this in two ways. First, the comparison between
 models uses the validation set, which the tuning never saw. Second, for the selected model we ran a
 nested cross-validation (3 outer folds, and inside each a 15-trial search with 3 inner folds): the
-outer folds evaluate the whole ``tune then fit'' procedure. Nested CV gives $0.829 \pm 0.005$,
-against 0.832 for the best inner score: the optimism exists but is small (0.003), and the validation
-score (0.828) agrees with the nested estimate.
+outer folds evaluate the whole ``tune then fit'' procedure. Nested CV gives $0.828 \pm 0.005$,
+against 0.832 for the best inner score: the optimism exists but is small (0.004), and the validation
+score (0.829) agrees with the nested estimate.
 
 \paragraph{Run log.} Every trial is appended to \code{runs/run\_log.csv}: model, trial number,
 parameters, mean and standard deviation of the CV PR-AUC, CV ROC-AUC and Brier, duration, and the
@@ -207,12 +207,12 @@ No-skill & always the prior & 0.239 & 0.500 & 0.000 & 0.000 & 0.000 & 0.182\\\mi
 Logistic regression & default, $t=0.5$ & 0.776 & 0.909 & 0.663 & 0.737 & 0.603 & 0.100\\
  & tuned, $t=0.5$ & 0.778 & 0.910 & 0.663 & 0.738 & 0.602 & 0.100\\
  & tuned, $t=0.36$ & 0.778 & 0.910 & 0.698 & 0.665 & 0.734 & 0.100\\\midrule
-Random forest & default, $t=0.5$ & 0.756 & 0.897 & 0.670 & 0.714 & 0.632 & 0.106\\
- & tuned, $t=0.5$ & 0.814 & 0.920 & 0.690 & 0.779 & 0.619 & 0.092\\
- & tuned, $t=0.34$ & 0.814 & 0.920 & 0.716 & 0.668 & 0.770 & 0.092\\\midrule
+Random forest & default, $t=0.5$ & 0.755 & 0.896 & 0.673 & 0.718 & 0.633 & 0.107\\
+ & tuned, $t=0.5$ & 0.815 & 0.920 & 0.687 & 0.780 & 0.615 & 0.092\\
+ & tuned, $t=0.35$ & 0.815 & 0.920 & 0.716 & 0.671 & 0.768 & 0.092\\\midrule
 Gradient boosting & default, $t=0.5$ & 0.827 & 0.927 & 0.711 & 0.775 & 0.657 & 0.088\\
- & tuned, $t=0.5$ & 0.828 & 0.928 & 0.717 & 0.777 & 0.667 & 0.088\\
- & tuned, $t=0.42$ & \textbf{0.828} & \textbf{0.928} & \textbf{0.732} & 0.730 & 0.734 & \textbf{0.088}\\\bottomrule
+ & tuned, $t=0.5$ & 0.829 & 0.928 & 0.716 & 0.772 & 0.668 & 0.088\\
+ & tuned, $t=0.41$ & \textbf{0.829} & \textbf{0.928} & \textbf{0.735} & 0.719 & 0.750 & \textbf{0.088}\\\bottomrule
 \end{tabular}
 \caption{Validation set. Thresholds $t$ are chosen on this set (maximum F1).}\label{tab:val}
 \end{table}
@@ -222,29 +222,29 @@ Gradient boosting & default, $t=0.5$ & 0.827 & 0.927 & 0.711 & 0.775 & 0.657 & 0
 \item \emph{No-skill to logistic regression:} PR-AUC 0.239 to 0.778. Most of the signal is captured
 by a linear model on well-prepared features. Tuning buys nothing (+0.002): the default $C=1$ is
 already close to the optimum ($C=0.65$, L1).
-\item \emph{Logistic regression to random forest:} +0.036 PR-AUC. Trees capture the age peak and
+\item \emph{Logistic regression to random forest:} +0.037 PR-AUC. Trees capture the age peak and
 interactions such as married $\times$ education. Here tuning is essential: the default forest,
-with fully grown trees, is \emph{worse} than the logistic regression (0.756) and poorly calibrated;
-limiting the depth to 13 and using 43\% of the features per split brings it to 0.814.
+with fully grown trees, is \emph{worse} than the logistic regression (0.755) and poorly calibrated;
+limiting the depth to 13 and using 43\% of the features per split brings it to 0.815.
 \item \emph{Random forest to gradient boosting:} +0.014 PR-AUC and the best Brier score. Boosting
-reduces the remaining bias. It is strong out of the box, so tuning buys little (+0.001), and it is
-the cheapest to serve (0.5 MB on disk against 29 MB for the forest).
-\item \emph{Threshold moving:} for every model, +0.015 to +0.035 F1 at no cost on ranking or calibration.
+reduces the remaining bias. It is strong out of the box, so tuning buys little (+0.002), and it is
+the cheapest to serve (0.6 MB on disk against 29 MB for the forest).
+\item \emph{Threshold moving:} for every model, +0.019 to +0.035 F1 at no cost on ranking or calibration.
 \end{itemize}
 
 \paragraph{Final model and test results.} Gradient boosting is selected on validation PR-AUC.
 Table~\ref{tab:test} gives the test results, computed once with thresholds frozen from validation.
 The ordering of the three models is the same as on validation. Test scores are about 0.01 lower
 than validation ones, the expected price of having selected models and thresholds on validation.
-The final model finds 72\% of the high earners with 71\% precision (Figure~\ref{fig:curves}).
+The final model finds 74\% of the high earners with 70\% precision (Figure~\ref{fig:curves}).
 
 \begin{table}[H]\centering\small
 \begin{tabular}{lrrrrrrrr}\toprule
 Model & $t$ & PR-AUC & ROC-AUC & F1 & Precision & Recall & Accuracy & Brier\\\midrule
 No-skill & 0.50 & 0.239 & 0.500 & 0.000 & 0.000 & 0.000 & 0.761 & 0.182\\
-Logistic regression & 0.36 & 0.769 & 0.907 & 0.689 & 0.650 & 0.733 & 0.841 & 0.102\\
-Random forest & 0.34 & 0.802 & 0.916 & 0.702 & 0.650 & 0.763 & 0.845 & 0.095\\
-\textbf{Gradient boosting} & 0.42 & \textbf{0.819} & \textbf{0.926} & \textbf{0.717} & 0.710 & 0.724 & 0.863 & \textbf{0.090}\\\bottomrule
+Logistic regression & 0.36 & 0.769 & 0.907 & 0.689 & 0.649 & 0.733 & 0.841 & 0.102\\
+Random forest & 0.35 & 0.802 & 0.916 & 0.700 & 0.651 & 0.758 & 0.845 & 0.095\\
+\textbf{Gradient boosting} & 0.41 & \textbf{0.819} & \textbf{0.926} & \textbf{0.720} & 0.704 & 0.736 & 0.863 & \textbf{0.090}\\\bottomrule
 \end{tabular}
 \caption{Untouched test set (9,758 people).}\label{tab:test}
 \end{table}
@@ -260,12 +260,12 @@ the final model on validation.}\label{fig:curves}
 
 \paragraph{Global.} SHAP values are computed with \code{TreeExplainer} on the validation set, in the
 raw score of the model (log-odds): $f(x)=\phi_0+\sum_j \phi_j$ and $\hat p=\sigma(f(x))$, with
-$\phi_0=-2.34$. Figure~\ref{fig:shap} shows the beeswarm and the mean $|\phi|$ summed over the one-hot
+$\phi_0=-2.40$. Figure~\ref{fig:shap} shows the beeswarm and the mean $|\phi|$ summed over the one-hot
 columns of each original feature. The five main features are age, marriage (\code{is\_married} and
 \code{marital-status}), capital gain, occupation and education. As a second opinion, permutation
 importance on raw validation columns (drop in PR-AUC when a column is shuffled) ranks
-\code{capital-gain} (0.220), \code{marital-status} (0.102), \code{education-num} (0.056),
-\code{capital-loss} (0.053) and \code{age} (0.051) first. The two methods agree on the set of
+\code{capital-gain} (0.222), \code{marital-status} (0.103), \code{education-num} (0.056),
+\code{age} (0.052) and \code{capital-loss} (0.051) first. The two methods agree on the set of
 features; they differ on \code{relationship} and \code{sex}, which look unimportant under permutation
 because \code{marital-status} and \code{relationship} are correlated and replace each other.
 
@@ -302,17 +302,17 @@ value on everyone, which creates unrealistic combinations when features are corr
 (Figure~\ref{fig:local} and repository): a confident true positive, a confident true negative, the
 most confident false positive and false negative, and a borderline case.
 \begin{itemize}
-\item \emph{True positive} ($\hat p=1.00$): a 52-year-old married federal employee with a master's
-degree and a capital gain of 15,024: the gain alone contributes $+8.1$ log-odds.
-\item \emph{True negative} ($\hat p=0.00$): 18 years old, 14 hours a week, never married; age
-($-2.5$) and a small capital gain of 594 ($-3.0$) drive the score down.
+\item \emph{True positive} ($\hat p=1.00$): a 30-year-old married executive with a master's degree,
+60 hours a week and a capital gain of 15,024: the gain alone contributes $+8.7$ log-odds.
+\item \emph{True negative} ($\hat p=0.00$): 18 years old, 4 hours a week, never married; age
+($-1.8$) and a small capital gain of 594 ($-2.6$) drive the score down.
 \item \emph{False positive} ($\hat p=1.00$): a self-employed married man working 90 hours with a
-capital gain of 41,310 ($+7.5$) who nevertheless earns less than 50K. The model trusts capital
+capital gain of 41,310 ($+7.3$) who nevertheless earns less than 50K. The model trusts capital
 gains almost blindly; a one-off gain is not a salary.
 \item \emph{False negative} ($\hat p=0.00$): 22 years old, 15 hours a week, no occupation recorded,
 yet above 50K. Nothing in the features can explain the label: irreducible error or label noise.
-\item \emph{Borderline} ($\hat p=0.42$): a 44-year-old married craftsman, 38 hours, no capital:
-marriage and age push up, the absence of capital and an average education push down.
+\item \emph{Borderline} ($\hat p=0.41$): a 36-year-old married clerk, 40 hours, no capital:
+marriage and age push up, the absence of capital gain pushes down.
 \end{itemize}
 
 \begin{figure}[H]\centering
@@ -325,16 +325,16 @@ marriage and age push up, the absence of capital and an average education push d
 
 Figure~\ref{fig:calib} shows the reliability curve of the final model on the test set (10 bins) and
 Table~\ref{tab:calib} the scores. The curve follows the diagonal: among people who receive a
-probability near 0.25, 26\% are positive; near 0.75, 77\%. The largest deviations are in the bins
-0.4--0.6 (0.45 predicted, 0.41 observed) and 0.8--0.9 (0.84 predicted, 0.80 observed).
+probability near 0.25, 25\% are positive; near 0.75, 75\%. The largest deviations are in the bins
+0.4--0.5 (0.45 predicted, 0.41 observed) and 0.8--0.9 (0.84 predicted, 0.82 observed).
 
 \begin{table}[H]\centering\small
 \begin{tabular}{lrrrr}\toprule
 Model & Brier & ECE & Mean predicted & ROC-AUC\\\midrule
-Final model, as is & 0.0903 & 0.0084 & 0.242 & 0.926\\
-Final model + Platt scaling (fitted on validation) & 0.0903 & 0.0067 & 0.242 & 0.926\\
-Final model + isotonic (fitted on validation) & 0.0907 & 0.0097 & 0.242 & 0.925\\
-Same model trained with class weights & 0.1136 & 0.1099 & 0.349 & 0.926\\\bottomrule
+Final model, as is & 0.0903 & 0.0069 & 0.242 & 0.926\\
+Final model + Platt scaling (fitted on validation) & 0.0902 & 0.0052 & 0.242 & 0.926\\
+Final model + isotonic (fitted on validation) & 0.0905 & 0.0069 & 0.241 & 0.926\\
+Same model trained with class weights & 0.1137 & 0.1101 & 0.350 & 0.926\\\bottomrule
 \end{tabular}
 \caption{Calibration on the test set (observed positive rate: 0.239).}\label{tab:calib}
 \end{table}
@@ -346,12 +346,12 @@ Same model trained with class weights & 0.1136 & 0.1099 & 0.349 & 0.926\\\bottom
 
 \paragraph{Over- or under-confident?} Very slightly \textbf{over-confident}: the mean predicted
 probability is 0.242 for an observed rate of 0.239 (signed gap $+0.003$), and the deviations sit
-below the diagonal in the middle bins. With an ECE of 0.008 the effect is negligible.
+below the diagonal in the middle bins. With an ECE of 0.007 the effect is negligible.
 \paragraph{Would we trust the probabilities as is?} \textbf{Yes.} Post-hoc calibration brings no
-real gain (Platt: ECE 0.0067, same Brier; isotonic is slightly worse), so the endpoint serves the raw
+real gain (Platt: ECE 0.0052, same Brier; isotonic leaves the ECE unchanged and slightly worsens the Brier), so the endpoint serves the raw
 probabilities. Two reasons explain this: boosting minimises the log-loss, a proper scoring rule, and
 we did not re-weight the classes. The last line of Table~\ref{tab:calib} is the counterfactual: the
-same model with class weights has the same ROC-AUC but predicts 0.349 on average for a true rate of
+same model with class weights has the same ROC-AUC but predicts 0.350 on average for a true rate of
 0.239 (ECE 0.110, strongly over-confident). This confirms the choice of Section~\ref{sec:imbalance}.
 One limit: calibration is verified on the same population; on a different year or country the
 probabilities would have to be re-checked.
@@ -367,25 +367,25 @@ differ strongly in the data (30.6\% of men and 10.4\% of women in the test set a
 demographic parity would force many wrong decisions, whereas equal opportunity asks that a woman who
 does earn more than 50K has the same chance of being recognised as a man who does.
 
-\paragraph{Audit.} With the single threshold 0.42 (Table~\ref{tab:fair}), the model finds 73.9\% of
-high-earning men but only 63.4\% of high-earning women: an equal-opportunity gap of 0.105. The
-selection rates are 31.8\% and 9.5\% (ratio 0.30, far below the usual four-fifths rule), mostly
-inherited from the base rates. The model is equally well calibrated in both groups (ECE 0.015 and
-0.013): the unfairness comes from applying one threshold to two different score distributions, not
-from wrong probabilities. A slice by race shows the same pattern for Black people (TPR 0.60, 923
+\paragraph{Audit.} With the single threshold 0.41 (Table~\ref{tab:fair}), the model finds 75.2\% of
+high-earning men but only 64.6\% of high-earning women: an equal-opportunity gap of 0.106. The
+selection rates are 32.6\% and 9.8\% (ratio 0.30, far below the usual four-fifths rule), mostly
+inherited from the base rates. The model is equally well calibrated in both groups (ECE 0.011 in
+both): the unfairness comes from applying one threshold to two different score distributions, not
+from wrong probabilities. A slice by race shows the same pattern for Black people (TPR 0.63, 923
 rows); the other groups are too small to conclude (75 to 291 rows).
 
 \paragraph{Mitigation.} We apply a post-processing technique: \textbf{one threshold per group},
 chosen on the validation set. A grid search keeps the pairs of thresholds whose TPR gap is below
-0.01 and takes the pair with the best F1: 0.42 for men, 0.25 for women. As a control we also tried
+0.01 and takes the pair with the best F1: 0.41 for men, 0.22 for women. As a control we also tried
 ``fairness through unawareness'' (retraining without \code{sex}).
 
 \begin{table}[H]\centering\small
 \begin{tabular}{lrrrrrrr}\toprule
 Setting & F1 & Prec. & Recall & Acc. & DP gap & EO gap & FPR gap\\\midrule
-Before: single threshold & 0.717 & 0.710 & 0.724 & 0.863 & 0.223 & 0.105 & 0.100\\
-Control: \code{sex} removed from the features & 0.715 & 0.712 & 0.719 & 0.863 & 0.211 & 0.082 & 0.090\\
-\textbf{After: group thresholds} & 0.713 & 0.686 & 0.742 & 0.857 & 0.178 & \textbf{0.020} & 0.064\\\bottomrule
+Before: single threshold & 0.720 & 0.704 & 0.736 & 0.863 & 0.228 & 0.106 & 0.103\\
+Control: \code{sex} removed from the features & 0.715 & 0.706 & 0.725 & 0.862 & 0.215 & 0.085 & 0.093\\
+\textbf{After: group thresholds} & 0.713 & 0.677 & 0.753 & 0.855 & 0.178 & \textbf{0.013} & 0.062\\\bottomrule
 \end{tabular}
 \caption{Performance and fairness gaps (male minus female) on the untouched test set.
 DP: demographic parity, EO: equal opportunity.}\label{tab:fair}
@@ -396,16 +396,16 @@ DP: demographic parity, EO: equal opportunity.}\label{tab:fair}
 \caption{Rates by sex on the test set, before (light) and after (solid) mitigation.}\label{fig:fair}
 \end{figure}
 
-\paragraph{Reading.} Removing the attribute barely helps (EO gap 0.105 to 0.082): \code{relationship}
+\paragraph{Reading.} Removing the attribute barely helps (EO gap 0.106 to 0.085): \code{relationship}
 and \code{marital-status} are proxies, so the model reconstructs sex. Group thresholds reduce the
-equal-opportunity gap from 0.105 to 0.020 in absolute value (the female TPR goes from 0.634 to 0.759,
-slightly above the male 0.739), and the equalized-odds gap from 0.105 to 0.064. The cost is small:
-$-0.004$ F1 and $-0.006$ accuracy; precision for women falls from 0.69 to 0.56, which is the price of
+equal-opportunity gap from 0.106 to 0.013 in absolute value (the female TPR goes from 0.646 to 0.765,
+slightly above the male 0.752), and the equalized-odds gap from 0.106 to 0.062. The cost is small:
+$-0.007$ F1 and $-0.008$ accuracy; precision for women falls from 0.69 to 0.54, which is the price of
 finding more of them. The demographic-parity gap remains large (0.178) because it reflects the base
 rates, which no threshold should erase. Two limits: using a different threshold per sex is explicit
 differential treatment, which is illegal in some uses (credit, hiring), so the endpoint serves
 the single threshold by default and the group thresholds are documented as an option; and the
-residual 0.020 shows that a threshold tuned on validation does not transfer perfectly.
+residual 0.013 shows that a threshold tuned on validation does not transfer perfectly.
 
 \section{Serving, limits and conclusion}
 
@@ -422,8 +422,8 @@ tell 51K from 500K. Thresholds were chosen for F1, not for a real cost matrix.
 \paragraph{Conclusion.} On a tabular, imbalanced problem, a disciplined pipeline matters more than
 the choice of algorithm: going from logistic regression to tuned boosting buys 0.05 PR-AUC, while
 a careless choice (default forest, class weights) costs as much in ranking or calibration. The final
-model ranks well (PR-AUC 0.819, ROC-AUC 0.926), gives probabilities that can be trusted (ECE 0.008),
-is explainable, and its main fairness gap can be closed for less than half a point of F1.
+model ranks well (PR-AUC 0.819, ROC-AUC 0.926), gives probabilities that can be trusted (ECE 0.007),
+is explainable, and its main fairness gap can be closed for less than one point of F1.
 
 \section*{Contribution statement}
 \begin{table}[H]\centering\small
