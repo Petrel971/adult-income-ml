@@ -1,0 +1,7 @@
+{
+  "single_threshold": 0.41944544058265876,
+  "group_thresholds": {
+    "Male": 0.42,
+    "Female": 0.25
+  }
+}
