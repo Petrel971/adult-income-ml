@@ -1,0 +1,42 @@
+{
+  "n_rows_raw": 48842,
+  "n_duplicates_removed": 52,
+  "n_rows": 48790,
+  "n_features_raw": 14,
+  "positive_rate": 0.23941381430621028,
+  "missing": {
+    "workclass": 2795,
+    "occupation": 2805,
+    "native-country": 856
+  },
+  "split_sizes": {
+    "train": 29274,
+    "val": 9758,
+    "test": 9758
+  },
+  "split_positive_rate": {
+    "train": 0.23942747830839653,
+    "val": 0.23939331830293092,
+    "test": 0.23939331830293092
+  },
+  "rate_by_sex": {
+    "Female": 0.1093595450049456,
+    "Male": 0.3039185625804869
+  },
+  "share_by_sex": {
+    "Male": 0.6684566509530642,
+    "Female": 0.33154334904693583
+  },
+  "rate_by_race": {
+    "Amer-Indian-Eskimo": 0.11702127659574468,
+    "Asian-Pac-Islander": 0.26961107448912325,
+    "Black": 0.12086269485372625,
+    "Other": 0.12315270935960591,
+    "White": 0.2541353022965911
+  },
+  "capital_gain_zero_share": 0.9172986267677803,
+  "native_us_share": 0.8975609756097561,
+  "rate_married": 0.44601169486229525,
+  "rate_not_married": 0.06400879220828438,
+  "no_skill_accuracy": 0.7605861856937897
+}
