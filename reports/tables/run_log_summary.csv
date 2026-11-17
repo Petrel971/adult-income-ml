@@ -1,0 +1,4 @@
+model,n_trials,best_trial,best_cv_pr_auc,best_cv_std,median_cv_pr_auc,total_fit_minutes,best_params,best_model_file
+logreg,30,20,0.78391,0.00699,0.783355,1.4,"{""C"": 0.6516373382426941, ""l1_ratio"": 1.0}",artifacts/models/trials/logreg_trial020.joblib
+random_forest,30,25,0.81698,0.00501,0.8119799999999999,2.7,"{""n_estimators"": 250, ""max_depth"": 13, ""min_samples_leaf"": 1, ""max_features"": 0.42955039972027864}",artifacts/models/trials/random_forest_trial025.joblib
+hist_gb,50,36,0.83193,0.00582,0.830465,4.1,"{""learning_rate"": 0.0909288192660825, ""max_iter"": 450, ""max_leaf_nodes"": 14, ""min_samples_leaf"": 78, ""l2_regularization"": 1.2368256772578516, ""max_features"": 0.5981378393596264}",artifacts/models/trials/hist_gb_trial036.joblib
