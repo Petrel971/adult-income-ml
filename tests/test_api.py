@@ -24,3 +24,13 @@ def test_predict_rejects_invalid_input():
     from src.serve import app
     client = TestClient(app)
     assert client.post("/predict", json={"age": -3}).status_code == 422
+
+
+def test_batch_matches_single_predictions():
+    from src.serve import app
+    client = TestClient(app)
+    person = json.loads((ROOT / "examples" / "person.json").read_text())
+    other = {**person, "age": 25, "capital-gain": 0}
+    batch = client.post("/predict/batch", json=[person, other]).json()
+    assert len(batch) == 2
+    assert batch[0] == client.post("/predict", json=person).json()

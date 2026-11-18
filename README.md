@@ -75,7 +75,9 @@ uvicorn src.serve:app --port 8000
 curl -X POST localhost:8000/predict -H "Content-Type: application/json" -d @examples/person.json
 ```
 
-Response:
+Several records at once: `POST /predict/batch` with a JSON list of records.
+
+Response of `/predict`:
 
 ```json
 {"probability": 0.8026, "prediction": 1, "label": ">50K", "threshold": 0.4093, "model": "hist_gb"}

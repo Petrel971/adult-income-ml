@@ -3,9 +3,11 @@
 Run:   uvicorn src.serve:app --port 8000
 Try:   curl -X POST localhost:8000/predict -H "Content-Type: application/json" \
             -d @examples/person.json
+       curl -X POST localhost:8000/predict/batch -H "Content-Type: application/json" \
+            -d "[$(cat examples/person.json)]"
 """
 from functools import lru_cache
-from typing import Optional
+from typing import List, Optional
 
 import joblib
 import pandas as pd
@@ -63,3 +65,9 @@ def predict(person: Person):
     return Prediction(probability=round(proba, 4), prediction=decision,
                       label=">50K" if decision else "<=50K",
                       threshold=round(final["threshold"], 4), model=final["model_name"])
+
+
+@app.post("/predict/batch", response_model=List[Prediction])
+def predict_batch(people: List[Person]):
+    """Several records in one call, scored with the same Pipeline and threshold."""
+    return [predict(p) for p in people]
