@@ -68,6 +68,8 @@ Run a single stage with `python main.py eda`, `python main.py tune`, etc.
 Stages, in order: `eda`, `baselines`, `tune`, `compare`, `explain`, `calibrate`, `fairness`.
 Everything is seeded (`seed: 42` in `config.yaml`).
 
+Shortcuts: `make install`, `make test`, `make all`, `make summary`, `make serve`.
+
 ## Serve a prediction
 
 ```bash
