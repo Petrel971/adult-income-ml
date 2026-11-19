@@ -113,6 +113,18 @@ Target: `income_gt_50k` = 1 if income > 50K (23.9% of the 48,790 records).
 - Moving the threshold changes precision and recall, never PR-AUC or ROC-AUC
   (`tests/test_evaluate.py`).
 
+## Tuning budget
+
+| Model | Trials | Best 5-fold CV PR-AUC | Fit time |
+|---|---|---|---|
+| Logistic regression | 30 | 0.784 ± 0.007 | 1.4 min |
+| Random forest | 30 | 0.817 ± 0.005 | 2.7 min |
+| Gradient boosting | 50 | 0.832 ± 0.006 | 4.1 min |
+
+Regenerate this table with `python -m src.runlog_summary` (writes
+`reports/tables/run_log_summary.csv`). The best inner score of gradient boosting is optimistic:
+nested CV gives 0.828 ± 0.005.
+
 ## Data discipline
 
 | Set | Size | Used for |
