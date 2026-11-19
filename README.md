@@ -104,6 +104,15 @@ threshold chosen on the validation set. Interactive documentation: `http://local
 
 Target: `income_gt_50k` = 1 if income > 50K (23.9% of the 48,790 records).
 
+## Metrics and decision threshold
+
+- **PR-AUC** (average precision) is the main metric: with 24% positives, "always no" already
+  has 76% accuracy, and ROC-AUC is flattered by the many negatives. The no-skill PR-AUC is 0.24.
+- The models are trained on the true class proportions. The decision threshold (0.41) is chosen
+  on the validation set to maximise F1; with real business costs, minimise the expected cost instead.
+- Moving the threshold changes precision and recall, never PR-AUC or ROC-AUC
+  (`tests/test_evaluate.py`).
+
 ## Data discipline
 
 | Set | Size | Used for |
