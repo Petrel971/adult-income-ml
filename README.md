@@ -87,6 +87,23 @@ The endpoint takes a raw record (missing values allowed), runs the whole fitted 
 (feature engineering, preprocessing, model) and returns the probability and the decision at the
 threshold chosen on the validation set. Interactive documentation: `http://localhost:8000/docs`.
 
+## Data dictionary
+
+| Column | Type | Note |
+|---|---|---|
+| age | int | 17 to 90 |
+| workclass | category | missing for most people without a job |
+| education-num | int | 1 to 16; `education` is the same information as text, dropped |
+| marital-status, relationship | category | strongly linked to each other and to sex |
+| occupation | category | missing together with workclass |
+| race, sex | category | sex is the sensitive attribute of the fairness audit |
+| capital-gain, capital-loss | float | zero for most people, log-transformed in the features |
+| hours-per-week | int | 1 to 99 |
+| native-country | category | 41 levels, rare ones grouped (`min_frequency=20`) |
+| fnlwgt | float | census sampling weight, dropped (describes the survey, not the person) |
+
+Target: `income_gt_50k` = 1 if income > 50K (23.9% of the 48,790 records).
+
 ## Data discipline
 
 | Set | Size | Used for |
